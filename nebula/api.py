@@ -96,7 +96,8 @@ def get_service_status(service_id, retry=False):
                     sys.stdout.flush()
                     sleep(5)
                 if status_code == 200:
-                    print(data)
+                    print(data['success'])
+                    print('Connection string: ' + data['connection_string'])
                     sys.exit(0)
             print('\nError: This seems to be taking longer than expected.')
             print('Please wait a few minutes and then check service status manually with "nebula status".')
@@ -110,7 +111,7 @@ def get_service_status(service_id, retry=False):
                 sys.exit(1)
             if status_code == 200:
                 print(data['success'])
-                print(data['connection_string'])
+                print('Connection string: ' + data['connection_string'])
                 sys.exit(0)
 
     except KeyboardInterrupt:
