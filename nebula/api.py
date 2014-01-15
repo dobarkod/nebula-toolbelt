@@ -159,6 +159,8 @@ def list_services(all):
     url = _construct_url(LIST)
     status_code, data = _api_request(requests.get, url)
     if status_code == 200:
+        if not data.get('services'):
+            print('No services found...')
         for service in data.get('services', []):
             if service.get('status') == 'running' or all:
                 print(ROW.format('ID', service.get('service_id')))
