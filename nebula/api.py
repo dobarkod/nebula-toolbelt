@@ -9,7 +9,9 @@ from nebula.conf import NEBULA_API_URL, API_KEY, _init_conf_file
 ##################### API CALLS ######################
 LOGIN = 'login'
 GET = 'get'
+DESTROY = 'destroy'
 PROVISIONING_STATUS = 'provisioning-status'
+LIST = 'list'
 ##################### END API calls ##################
 
 
@@ -30,7 +32,11 @@ def _construct_url(action, service=None, service_id=None, plan=None, platform=No
         GET: NEBULA_API_URL +
             '{0}/get/service/{1}-{2}/{3}/'.format(API_KEY, service, plan, platform),
         PROVISIONING_STATUS: NEBULA_API_URL +
-            '{0}/service/{1}/status/'.format(API_KEY, service_id)
+            '{0}/service/{1}/status/'.format(API_KEY, service_id),
+        DESTROY: NEBULA_API_URL +
+            '{0}/destroy/service/{1}/'.format(API_KEY, service_id),
+        LIST: NEBULA_API_URL +
+            '{0}/my/services/'.format(API_KEY),
     }
     return apis[action]
 
@@ -133,3 +139,36 @@ def get_service(service, plan, platform):
         sys.exit(1)
 
     return service_id
+
+
+@require_api_key
+def destroy_service(service_id):
+    url = _construct_url(DESTROY, service_id=service_id)
+    status_code, data = _api_request(requests.delete, url)
+    if status_code == 200:
+        print(data)
+        sys.exit(0)
+    else:
+        print(data)
+        sys.exit(1)
+
+
+@require_api_key
+def list_services(all):
+    ROW = "{0} : {1}"
+    url = _construct_url(LIST)
+    status_code, data = _api_request(requests.get, url)
+    if status_code == 200:
+        for service in data.get('services', []):
+            if service.get('status') == 'running' or all:
+                print(ROW.format('ID', service.get('service_id')))
+                print(ROW.format('STATUS', service.get('status').upper()))
+                print(ROW.format('PLAN', service.get('plan')))
+                print(ROW.format('Connection String', service.get('description')))
+                print(ROW.format('Started at', service.get('started_at')))
+                print(ROW.format('Destroyed at', service.get('destroyed_at')))
+                print("\n")
+        sys.exit(0)
+    else:
+        print(data)
+        sys.exit(1)

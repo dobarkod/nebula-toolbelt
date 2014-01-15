@@ -4,10 +4,9 @@
     nebula login
     nebula get <service> <plan> <platform> [<location>]
     nebula status <service_id>
-    nebula start <service_id>
-    nebula stop <service_id>
     nebula restart <service_id>
     nebula destroy <service_id>
+    nebula list [--all]
 
     Use Nebula to provision and manipulate various services.
 
@@ -38,7 +37,8 @@ if __name__ == '__main__' and __package__ is None:
 
     arguments = docopt(__doc__)
 
-    from nebula.api import get_service, get_service_status, login
+    from nebula.api import (get_service, get_service_status, login, destroy_service,
+        list_services)
     from nebula.conf import PLATFORMS
 
     if arguments.get('get'):
@@ -62,3 +62,10 @@ if __name__ == '__main__' and __package__ is None:
 
     if arguments.get('login'):
         login()
+
+    if arguments.get('destroy'):
+        service_id = arguments.get('<service_id>')
+        destroy_service(service_id)
+
+    if arguments.get('list'):
+        list_services(all=arguments.get('--all'))
