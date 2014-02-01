@@ -1,11 +1,11 @@
 from os.path import expanduser, join
+import logging
 
-
-##################### CONFIG #########################
-NEBULA_API_URL = 'http://localhost:8000/api/v1/'
+NEBULA_API_URL = 'https://nebuladb.io/api/v1/'
 CONFIG = join(expanduser("~"), '.nebula.conf')
 PLATFORMS = ['digital-ocean', 'rackspace', 'linode', 'aws']
-#################### END CONFIG ######################
+
+log = logging.getLogger(__name__)
 
 
 def _get_api_key():
@@ -17,7 +17,7 @@ def _get_api_key():
                 if line.startswith('API_KEY'):
                     API_KEY = line.split('=')[1].strip()
     except IOError:
-        print('Warning: File nebula.conf not found.')
+        log.warning('Warning: File nebula.conf not found.')
     return API_KEY
 
 
@@ -32,3 +32,9 @@ def _init_conf_file(api_key):
 
 
 API_KEY = _get_api_key()
+
+# Used for dev override
+try:
+    from .conf_local import *
+except ImportError:
+    pass

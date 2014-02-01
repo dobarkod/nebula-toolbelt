@@ -13,17 +13,17 @@
     Supported services:
         PostgreSQL Database
 
-    Choosing Data Center [<location>]:
-        Digital Ocean: NY1, NY2, AM1, AM2, SF1 (defaults to NY1)
-        Rasckspace: Not supported yet (defaults to Northern Virginia)
-        Linode: Not supported yet (defaults to Newark)
-        AWS: Not supported yet (defaults to Northern Virginia)
-
     Supported Platforms:
         Digital Ocean  digital-ocean
         Rackspace      rackspace
         Linode         linode
         AWS            aws
+
+    Choosing Data Centers [<location>]:
+        Digital Ocean: NY1, NY2, AM1, AM2, SF1 (defaults to NY1)
+        Rasckspace: DFW, ORD, IAD, SYD, HGK (defaults to Northern Virginia)
+        Linode: Not supported yet (defaults to Newark)
+        AWS: Not supported yet (defaults to Northern Virginia)
 
     Options:
       -h --help     Lists help
@@ -33,6 +33,7 @@ from docopt import docopt
 
 if __name__ == '__main__' and __package__ is None:
     from os import sys, path
+    import logging
     sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
     arguments = docopt(__doc__)
@@ -41,19 +42,24 @@ if __name__ == '__main__' and __package__ is None:
         list_services)
     from nebula.conf import PLATFORMS
 
+    # Disable requests logging
+    logging.getLogger("requests").propagate = False
+
+    log = logging.getLogger(__name__)
+
     if arguments.get('get'):
 
         platform = arguments.get('<platform>')
         if platform not in PLATFORMS:
-            print('ERROR: Available keywords for platforms are: ')
+            log.error('ERROR: Available keywords for platforms are: ')
             for p in PLATFORMS:
-                print(p)
+                log.info(p)
             sys.exit(1)
 
         service = arguments.get('<service>')
         plan = arguments.get('<plan>')
         service_id = get_service(service, plan, platform)
-        print('Please wait while we set up your service')
+        log.info('Please wait while we set up your service')
         get_service_status(service_id, retry=True)
 
     if arguments.get('status'):
