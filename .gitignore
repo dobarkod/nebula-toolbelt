@@ -1,2 +1,3 @@
 *.pyc
 /nebula.egg-info/*
+/nebula/conf_local.*
