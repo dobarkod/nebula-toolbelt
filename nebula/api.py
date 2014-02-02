@@ -48,7 +48,7 @@ def _construct_url(action, service=None, service_id=None, plan=None, platform=No
 def _api_request(method, url, **kwargs):
     try:
         r = method(url, **kwargs)
-    except:
+    except Exception:
         log.error('Error connecting to Nebula API.')
         log.error('Please try again later.')
         sys.exit(1)
@@ -98,19 +98,18 @@ def login():
 
 @require_api_key
 def get_service_status(service_id, retry=False, max_retries=60):
-    def _handle_output():
+    def _handle_output(status_code, data, retry):
         if status_code == 403:
             log.error(data)
             sys.exit(1)
-        if status_code == 404:
+        elif status_code == 404:
             if retry:
                 sys.stdout.write('\r{0}'.format('.' * ping))
                 sys.stdout.flush()
-                sleep(5)
             else:
                 log.error('We could not find a service with the given ID.')
                 sys.exit(1)
-        if status_code == 200:
+        elif status_code == 200:
             log.info(data['success'])
             log.info('Connection string: ' + data['connection_string'])
             return True
@@ -123,12 +122,15 @@ def get_service_status(service_id, retry=False, max_retries=60):
         if retry:
             for ping in range(1, max_retries):
                 status_code, data = _api_request(requests.get, url)
-                _handle_output()
+                done = _handle_output(status_code, data, retry)
+                if done:
+                    return True
+                sleep(5)
             log.error('\nError: This seems to be taking longer than expected.')
             log.error('Please wait a few minutes and then check service status manually with "nebula status".')
         else:
             status_code, data = _api_request(requests.get, url)
-            return _handle_output()
+            return _handle_output(status_code, data, retry)
 
     except KeyboardInterrupt:
         log.error('\nNOTE: You can still check the progress with the "nebula status" command.')

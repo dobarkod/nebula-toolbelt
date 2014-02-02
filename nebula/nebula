@@ -34,9 +34,9 @@ from docopt import docopt
 if __name__ == '__main__' and __package__ is None:
     from os import sys, path
     import logging
-    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
+    logging.basicConfig(format='%(message)s', level=logging.INFO)
 
-    arguments = docopt(__doc__)
+    sys.path.append(path.dirname(path.dirname(path.abspath(__file__))))
 
     from nebula.api import (get_service, get_service_status, login, destroy_service,
         list_services)
@@ -47,6 +47,7 @@ if __name__ == '__main__' and __package__ is None:
 
     log = logging.getLogger(__name__)
 
+    arguments = docopt(__doc__)
     if arguments.get('get'):
 
         platform = arguments.get('<platform>')
