@@ -20,7 +20,7 @@
         AWS            aws
 
     Choosing Data Centers [<location>]:
-        Digital Ocean: NY1, NY2, AM1, AM2, SF1 (defaults to NY1)
+        Digital Ocean: NY1, NY2, AM1, AM2, SF1, SP1 (defaults to NY2)
         Rasckspace: DFW, ORD, IAD, SYD, HGK (defaults to Northern Virginia)
         Linode: Not supported yet (defaults to Newark)
         AWS: Not supported yet (defaults to Northern Virginia)
@@ -59,7 +59,8 @@ if __name__ == '__main__' and __package__ is None:
 
         service = arguments.get('<service>')
         plan = arguments.get('<plan>')
-        service_id = get_service(service, plan, platform)
+        location = arguments.get('<location>')
+        service_id = get_service(service, plan, platform, location)
         log.info('Please wait while we set up your service')
         get_service_status(service_id, retry=True)
 

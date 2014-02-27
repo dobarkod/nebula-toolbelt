@@ -29,12 +29,12 @@ def require_api_key(f):
     return wrapper
 
 
-def _construct_url(action, service=None, service_id=None, plan=None, platform=None):
+def _construct_url(action, service=None, service_id=None, plan=None, platform=None, location=None):
     apis = {
         LOGIN: NEBULA_API_URL +
             'login/',
         GET: NEBULA_API_URL +
-            '{0}/get/service/{1}-{2}/{3}/'.format(API_KEY, service, plan, platform),
+            '{0}/get/service/{1}-{2}/{3}/{4}'.format(API_KEY, service, plan, platform, location),
         STATUS: NEBULA_API_URL +
             '{0}/service/{1}/status/'.format(API_KEY, service_id),
         DESTROY: NEBULA_API_URL +
@@ -138,8 +138,8 @@ def get_service_status(service_id, retry=False, max_retries=60):
 
 
 @require_api_key
-def get_service(service, plan, platform):
-    url = _construct_url(GET, service=service, plan=plan, platform=platform)
+def get_service(service, plan, platform, location):
+    url = _construct_url(GET, service=service, plan=plan, platform=platform, location=location)
     status_code, data = _api_request(requests.get, url)
     if status_code != 200:
         log.error(data)
