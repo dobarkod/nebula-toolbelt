@@ -30,11 +30,14 @@ def require_api_key(f):
 
 
 def _construct_url(action, service=None, service_id=None, plan=None, platform=None, location=None):
+    # FIXME: this is ugly
+    if location is None:
+        location = ''
     apis = {
         LOGIN: NEBULA_API_URL +
             'login/',
         GET: NEBULA_API_URL +
-            '{0}/get/service/{1}-{2}/{3}/{4}'.format(API_KEY, service, plan, platform, location),
+            '{0}/get/service/{1}-{2}/{3}/'.format(API_KEY, service, plan, platform) + location,
         STATUS: NEBULA_API_URL +
             '{0}/service/{1}/status/'.format(API_KEY, service_id),
         DESTROY: NEBULA_API_URL +
