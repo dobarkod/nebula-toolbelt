@@ -19,22 +19,25 @@ if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
 
+scripts = ['nebula/nebula']
+
 setup(
     name='nebula',
     version=VERSION,
     author='Deni Bertovic',
     author_email='deni@kset.org',
     description='CLI/Toolbelt for Nebula',
-    url='github.com/denibertovic/nebula-toolbelt',
+    url='github.com/dobarkod/nebula-toolbelt',
     packages=['nebula'],
-    license='BSD',
+    license='Apache 2.0',
+    scripts=scripts,
     install_requires=requirements + test_requirements,
     classifiers=[
         'Development Status :: 3 - Alpha',
+        'License :: OSI Approved :: Apache Software License',
         'Environment :: Console',
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
-        'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python',
         'Topic :: System :: Clustering',
         'Topic :: System :: Distributed Computing',
