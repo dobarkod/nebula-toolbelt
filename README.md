@@ -1,5 +1,9 @@
 ## Nebula Toolbelt
 
+### Install:
+
+    pip install nebula
+
 ### Usage:
 
     nebula login
