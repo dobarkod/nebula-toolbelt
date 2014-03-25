@@ -20,7 +20,7 @@
         AWS            aws
 
     Choosing Data Centers [<location>]:
-        Digital Ocean: NY1, NY2, AM1, AM2, SF1, SP1 (defaults to NY2)
+        Digital Ocean: NY1, NY2, AM1, AM2, SF1, SP1 (defaults to AM1)
         Rasckspace: DFW, ORD, IAD, SYD, HGK (defaults to Northern Virginia)
         Linode: Not supported yet (defaults to Newark)
         AWS: Not supported yet (defaults to Northern Virginia)
