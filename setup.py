@@ -4,15 +4,8 @@ import sys
 
 from setuptools import setup
 
-ROOT_DIR = os.path.dirname(__file__)
-SOURCE_DIR = os.path.join(ROOT_DIR)
 
-test_requirements = []
-with open('./requirements.txt') as requirements_txt:
-    requirements = [line for line in requirements_txt]
-
-
-VERSION = '0.0.1'
+VERSION = '0.0.2'
 
 
 if sys.argv[-1] == 'publish':
@@ -31,7 +24,7 @@ setup(
     packages=['nebula'],
     license='Apache 2.0',
     scripts=scripts,
-    install_requires=requirements + test_requirements,
+    install_requires=['docopt >= 0.6.1', 'requests >= 2.0.1'],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: Apache Software License',
