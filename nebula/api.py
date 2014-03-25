@@ -106,12 +106,19 @@ def get_service_status(service_id, retry=False, max_retries=60):
             log.error(data)
             sys.exit(1)
         elif status_code == 404:
+            log.error('We could not find a service with the given ID.')
+            sys.exit(1)
+        elif status_code == 500:
+            log.error(data)
+            sys.exit(1)
+        elif status_code == 400:
             if retry:
                 sys.stdout.write('\r{0}'.format('.' * ping))
                 sys.stdout.flush()
             else:
-                log.error('We could not find a service with the given ID.')
+                log.error(data)
                 sys.exit(1)
+
         elif status_code == 200:
             log.info(data['success'])
             log.info('Connection string: ' + data['connection_string'])

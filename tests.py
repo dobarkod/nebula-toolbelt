@@ -73,7 +73,8 @@ class TestAPICalls(unittest.TestCase):
         result = api.get_service(
             service='testservice',
             plan='testplan',
-            platform='testplatform')
+            platform='testplatform',
+            location='testlocation')
         self.assertEquals(1, result)
 
     def test_getting_new_service_no_id_returned_from_api_server(self):
@@ -85,7 +86,8 @@ class TestAPICalls(unittest.TestCase):
         params = {
             'service': 'testservice',
             'plan': 'testplan',
-            'platform': 'testplatform'
+            'platform': 'testplatform',
+            'location': 'testlocation'
         }
 
         self.assertRaises(
@@ -102,7 +104,8 @@ class TestAPICalls(unittest.TestCase):
         params = {
             'service': 'testservice',
             'plan': 'testplan',
-            'platform': 'testplatform'
+            'platform': 'testplatform',
+            'location': 'testlocation'
         }
 
         self.assertRaises(
@@ -185,6 +188,17 @@ class TestAPICalls(unittest.TestCase):
 
         def fake_api_request(method, url, **kwargs):
             return (404, {})
+        api._api_request = fake_api_request
+
+        self.assertRaises(
+            SystemExit,
+            api.get_service_status,
+            service_id='test_id')
+
+    def test_getting_service_status_400(self):
+
+        def fake_api_request(method, url, **kwargs):
+            return (400, {})
         api._api_request = fake_api_request
 
         self.assertRaises(
