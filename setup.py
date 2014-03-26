@@ -20,7 +20,7 @@ setup(
     author='Deni Bertovic',
     author_email='deni@kset.org',
     description='CLI/Toolbelt for Nebula',
-    url='github.com/dobarkod/nebula-toolbelt',
+    url='https://github.com/dobarkod/nebula-toolbelt',
     packages=['nebula'],
     license='Apache 2.0',
     scripts=scripts,
