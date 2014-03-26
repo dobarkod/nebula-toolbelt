@@ -72,6 +72,15 @@ if __name__ == '__main__' and __package__ is None:
         login()
 
     if arguments.get('destroy'):
+        log.info("===This action is not reversible and will destroy all you data.===")
+        try:
+            input = raw_input
+        except NameError:
+            pass
+        confirm = input("To confirm please type in the word DESTROY: ")
+        if confirm.lower().strip() != 'destroy':
+            log.info('Confirmation not received. Aborting...')
+            sys.exit(1)
         service_id = arguments.get('<service_id>')
         destroy_service(service_id)
 
